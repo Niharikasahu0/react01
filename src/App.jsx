@@ -1,32 +1,36 @@
-import PropTypes from 'prop-types';
+import React, { createContext, useState } from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import ListEmp from "./components/ListEmp";
+import AddEmp from "./components/AddEmp";
+import ViewEmp from "./components/ViewEmp";
+import "./App.css";
 
 
-function Student(props) {
-  console.log(props);  
-  return(
-    <div>
-      <h2>{props.name}</h2>
-      <p>{props.age}</p>
-       <p>{props.isStudent}</p>
-    </div>
+export const ListContext = createContext();
+
+function App() {
+  // useState must be inside component
+  const [EmployeeList, setEmployeeList] = useState([]);
+
+  return (
+    <ListContext.Provider value={{ EmployeeList, setEmployeeList }}>
+      <div>
+        {/* Navbar */}
+        <nav>
+          <Link to="/">Home</Link> |{" "}
+          <Link to="/add">Add</Link> |{" "}
+          <Link to="/view">View</Link>
+        </nav>
+
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<ListEmp />} />
+          <Route path="/add" element={<AddEmp />} />
+          <Route path="/view" element={<ViewEmp />} />
+        </Routes>
+      </div>
+    </ListContext.Provider>
   );
 }
 
-
-
-
-Student.propTypes = {
-  name: PropTypes.string,
-  age: PropTypes.number,
-  isStudent: PropTypes.bool
-};
-Student.defaultProps={
-  name:"Guest",
-  age:0,
-  isStudent:false,
-}
-
-//Default props=default value for props in case they are not passed from the parent component 
-// name:guest
-
-export default Student;
+export default App;
