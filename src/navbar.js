@@ -1,8 +1,9 @@
 import React from "react";
-export function Navbar(){
+export default function navbar() {
     return(
         <div>
-            hello i am a Navbar
+            hello i am a navbar
         </div>
     )
+    
 }

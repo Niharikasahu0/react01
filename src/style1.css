@@ -1,0 +1,61 @@
+/* Navbar */
+.navbar {
+  background-color: #ff99b3;
+  padding: 10px;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.navbar .nav-link {
+  color: white !important;
+  margin-left: 10px;
+}
+
+/* Main container */
+.container {
+  background-color: #ffe6f0; 
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ffb3c6;
+  text-align: left;
+}
+
+th {
+  background-color: #ff6699;
+  color: white;
+}
+
+/* Buttons */
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.btn-primary {
+  background-color: #ff6699;
+  color: white;
+}
+
+button.btn-danger {
+  background-color: #ff3366;
+  color: white;
+}
+
+/* Form inputs */
+input, select {
+  padding: 5px;
+  border: 1px solid #ffb3c6;
+  border-radius: 5px;
+}

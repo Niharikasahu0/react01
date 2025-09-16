@@ -40,3 +40,36 @@
 .read-the-docs {
   color: #888;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #ff69b4; /* pink background */
+  padding: 10px 20px;
+  display: flex;
+  gap: 20px;
+}
+
+/* Navbar links */
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.font-size-12 {
+  font-size: 12px;
+}
+
+.form-input {
+  width: 100px;
+  height: 30px;
+  border: 1px solid rgb(121, 121, 121);
+  outline: none;
+  padding: 0 5px;
+}
