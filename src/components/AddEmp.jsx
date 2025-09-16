@@ -1,8 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ListContext } from "../App";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AddEmp = () => {
   const { EmployeeList, setEmployeeList } = useContext(ListContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [formValue, setFormValue] = useState({
     EmployeName: "",
     EmployeeId: "",
@@ -12,6 +16,13 @@ const AddEmp = () => {
     performance: "",
   });
 
+  // Prefill for edit
+  useEffect(() => {
+    if (location.state) {
+      setFormValue(location.state); // original data for edit
+    }
+  }, [location.state]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValue({ ...formValue, [name]: value });
@@ -19,8 +30,16 @@ const AddEmp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmployeeList([...EmployeeList, formValue]);
-    // Reset form after submission
+
+    if (location.state) { // edit mode
+      const updatedList = EmployeeList.map(emp =>
+        emp.EmployeeId === location.state.EmployeeId ? formValue : emp
+      );
+      setEmployeeList(updatedList);
+    } else { // add new
+      setEmployeeList([...EmployeeList, formValue]);
+    }
+
     setFormValue({
       EmployeName: "",
       EmployeeId: "",
@@ -29,102 +48,51 @@ const AddEmp = () => {
       EmployeeDesignation: "",
       performance: "",
     });
+
+    navigate("/");
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row g-3 mt-4">
-        <div className="col-12">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="m-0">Add Employee</h3>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="row g-3">
-                  <div className="col-3">
-                    <label className="fs-6">Employee Name</label>
-                    <input
-                      type="text"
-                      placeholder="Employee name"
-                      className="form-input"
-                      name="EmployeName"
-                      value={formValue.EmployeName}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-3">
-                    <label className="fs-6">Employee Id</label>
-                    <input
-                      type="text"
-                      placeholder="Employee Id"
-                      className="form-input"
-                      name="EmployeeId"
-                      value={formValue.EmployeeId}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-3">
-                    <label className="fs-6">Employee Salary</label>
-                    <input
-                      type="text"
-                      placeholder="Employee Salary"
-                      className="form-input"
-                      name="EmployeeSalary"
-                      value={formValue.EmployeeSalary}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-3">
-                    <label className="fs-6">Employee Designation</label>
-                    <input
-                      type="text"
-                      placeholder="Employee Designation"
-                      className="form-input"
-                      name="EmployeeDesignation"
-                      value={formValue.EmployeeDesignation}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-3">
-                    <label className="fs-6">Employee Email</label>
-                    <input
-                      type="text"
-                      placeholder="Employee Email"
-                      name="EmployeeEmail"
-                      className="form-input"
-                      value={formValue.EmployeeEmail}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-3">
-                    <label className="fs-6">Employee Performance</label>
-                    <select
-                      className="form-input"
-                      name="performance"
-                      value={formValue.performance}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Performance</option>
-                      <option value="excellent">Excellent</option>
-                      <option value="good">Good</option>
-                      <option value="average">Average</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <button type="submit" className="btn btn-primary">
-                    Save Employee
-                  </button>
-                </div>
-              </form>
-            </div>
+    <div className="container mt-4">
+      <h3>{location.state ? "Edit Employee" : "Add Employee"}</h3>
+      <form onSubmit={handleSubmit} className="row g-3">
+        {["EmployeName", "EmployeeId", "EmployeeSalary", "EmployeeEmail", "EmployeeDesignation"].map(field => (
+          <div className="col-3" key={field}>
+            <label>{field}</label>
+            <input
+              type={field === "EmployeeEmail" ? "email" : "text"}
+              name={field}
+              value={formValue[field]}
+              onChange={handleChange}
+              required
+              readOnly={field === "EmployeeId" && location.state} // cannot edit ID
+              className="form-control"
+            />
           </div>
+        ))}
+        <div className="col-3">
+          <label>Performance</label>
+          <select
+            name="performance"
+            value={formValue.performance}
+            onChange={handleChange}
+            required
+            className="form-control"
+          >
+            <option value="">Select Performance</option>
+            <option value="excellent">Excellent</option>
+            <option value="good">Good</option>
+            <option value="average">Average</option>
+          </select>
         </div>
-      </div>
+        <div className="col-12 mt-3">
+          <button type="submit" className="btn btn-primary">
+            {location.state ? "Update Employee" : "Add Employee"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
 
 export default AddEmp;
-
